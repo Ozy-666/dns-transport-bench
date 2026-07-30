@@ -2,3 +2,4 @@ __pycache__/
 *.pyc
 *.pcap
 results/*.json
+!results/dnsdoh.art/*.json

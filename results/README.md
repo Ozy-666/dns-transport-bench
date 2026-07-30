@@ -1,24 +1,34 @@
 # Published results
 
-## dnsdoh.art-2026-07-29
+## dnsdoh.art
 
 The run behind the tables and charts in
 [Encrypted DNS transports compared](https://dnsdoh.art/guides/doh-vs-dot-vs-dnscrypt-vs-doq.html).
 
-Taken on 29 July 2026 against `dnsdoh.art` (194.180.189.33): one vantage point,
-one client stack, 20 ms one-way netem delay so a round trip costs 40 ms, medians
-of 9 cold-connection runs for `packets` and `pq`, 60 runs at 2% loss per
-direction for `loss`.
+Taken against `dnsdoh.art` (194.180.189.33): one vantage point, one client stack,
+20 ms one-way netem delay so a round trip costs 40 ms. `packets.json` and
+`pq.json` are medians of 9 cold-connection runs, taken 29 July 2026.
+`loss.json` is 300 runs per transport at 2% loss per direction, re-taken on
+30 July 2026 after a 60-run version proved too small: at n=60 the 99th
+percentile is literally the single worst observation, so the tail figures moved
+by more than a second between runs. At n=300 they are stable and both TCP
+transports agree.
 
 Headline numbers:
 
 | | time | round trips | bytes | p99 at 2% loss |
 |---|---|---|---|---|
-| Do53 | 40.8 ms | 1.0 | 217 B | 41 ms, but 2/60 never returned |
-| DoQ | 105.0 ms | 2.6 | 9 742 B | 376 ms |
-| DoT | 143.6 ms | 3.6 | 6 833 B | 1 205 ms |
-| DoH | 144.9 ms | 3.6 | 7 238 B | 1 230 ms |
-| DoH3 | 147.9 ms | 3.7 | 10 855 B | 455 ms |
+| Do53 | 40.8 ms | 1.0 | 217 B | 41.0 ms, but 9/300 never returned |
+| DoQ | 105.0 ms | 2.6 | 9 742 B | 310.2 ms |
+| DoT | 143.6 ms | 3.6 | 6 833 B | 1 220.2 ms |
+| DoH | 144.9 ms | 3.6 | 7 238 B | 1 224.0 ms |
+| DoH3 | 147.9 ms | 3.7 | 10 855 B | 329.1 ms, and 13/300 returned no answer |
+
+The loss result worth keeping: both TCP transports sit almost exactly one second
+above their own median at the 99th percentile (DoT +1 076 ms, DoH +1 079 ms),
+which is the RFC 6298 retransmission timeout floor showing up as a constant
+rather than as a distribution. The worst samples, 3 360 ms and 3 343 ms, are one
+further doubling of that timer. Neither QUIC transport passed 434 ms.
 
 The one that needs explaining: on DoQ the *post-quantum* handshake finished a
 full round trip **faster** than the classical one. QUIC forbids a server from
