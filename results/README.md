@@ -18,17 +18,24 @@ Headline numbers:
 
 | | time | round trips | bytes | p99 at 2% loss |
 |---|---|---|---|---|
-| Do53 | 40.8 ms | 1.0 | 217 B | 41.0 ms, but 9/300 never returned |
-| DoQ | 105.0 ms | 2.6 | 9 742 B | 310.2 ms |
-| DoT | 143.6 ms | 3.6 | 6 833 B | 1 220.2 ms |
-| DoH | 144.9 ms | 3.6 | 7 238 B | 1 224.0 ms |
-| DoH3 | 147.9 ms | 3.7 | 10 855 B | 329.1 ms, and 13/300 returned no answer |
+| Do53 | 40.8 ms | 1.0 | 217 B | 41.3 ms, but 12/300 never returned |
+| DoQ | 105.0 ms | 2.6 | 9 742 B | 310.3 ms |
+| DoT | 143.6 ms | 3.6 | 6 833 B | 1 225.8 ms |
+| DoH | 144.9 ms | 3.6 | 7 238 B | 1 222.1 ms |
+| DoH3 | 147.9 ms | 3.7 | 10 855 B | 329.4 ms, and 15/300 returned no answer |
 
 The loss result worth keeping: both TCP transports sit almost exactly one second
-above their own median at the 99th percentile (DoT +1 076 ms, DoH +1 079 ms),
+above their own median at the 99th percentile (DoT +1 082 ms, DoH +1 078 ms),
 which is the RFC 6298 retransmission timeout floor showing up as a constant
-rather than as a distribution. The worst samples, 3 360 ms and 3 343 ms, are one
-further doubling of that timer. Neither QUIC transport passed 434 ms.
+rather than as a distribution. DoT's worst sample, 3 379 ms, is one further
+doubling of that timer. Neither QUIC transport passed 495 ms.
+
+DoH3's 15 no-answer lookups are not client trouble: they are our own
+post-quantum HTTP/3 handshake, the largest exchange this server performs, losing
+a packet and then hitting QUIC's 3x anti-amplification limit so the server may
+not retransmit until the client's probe timeout fires. Forcing the classical key
+exchange (`--tls-curve-preferences X25519`) gave 100 successes out of 100 under
+identical loss. Read DoH3's tail as "when it answers".
 
 The one that needs explaining: on DoQ the *post-quantum* handshake finished a
 full round trip **faster** than the classical one. QUIC forbids a server from
