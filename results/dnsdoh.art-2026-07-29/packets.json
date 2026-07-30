@@ -1,0 +1,57 @@
+{
+ "Do53": {
+  "samples": 9,
+  "ms": 40.8,
+  "pkts_c2s": 1,
+  "pkts_s2c": 1,
+  "bytes_c2s": 71,
+  "bytes_s2c": 146,
+  "bytes_total": 217,
+  "flights": 1,
+  "rtt_est": 1.02
+ },
+ "DoT": {
+  "samples": 9,
+  "ms": 143.6,
+  "pkts_c2s": 5,
+  "pkts_s2c": 4,
+  "bytes_c2s": 1770,
+  "bytes_s2c": 5063,
+  "bytes_total": 6833,
+  "flights": 3,
+  "rtt_est": 3.59
+ },
+ "DoQ": {
+  "samples": 9,
+  "ms": 105.0,
+  "pkts_c2s": 4,
+  "pkts_s2c": 7,
+  "bytes_c2s": 4019,
+  "bytes_s2c": 5723,
+  "bytes_total": 9742,
+  "flights": 2,
+  "rtt_est": 2.62
+ },
+ "DoH2": {
+  "samples": 9,
+  "ms": 144.9,
+  "pkts_c2s": 8,
+  "pkts_s2c": 4,
+  "bytes_c2s": 2231,
+  "bytes_s2c": 5007,
+  "bytes_total": 7238,
+  "flights": 3,
+  "rtt_est": 3.62
+ },
+ "DoH3": {
+  "samples": 9,
+  "ms": 147.9,
+  "pkts_c2s": 4,
+  "pkts_s2c": 7,
+  "bytes_c2s": 5232,
+  "bytes_s2c": 5623,
+  "bytes_total": 10855,
+  "flights": 2,
+  "rtt_est": 3.7
+ }
+}

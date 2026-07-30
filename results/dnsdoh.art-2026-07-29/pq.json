@@ -1,0 +1,46 @@
+{
+ "DoT": {
+  "pq_c2s": 2002,
+  "pq_s2c": 5063,
+  "cl_c2s": 774,
+  "cl_s2c": 3975,
+  "pq_total": 7065,
+  "cl_total": 4749,
+  "pq_ms": 144.0,
+  "cl_ms": 145.8,
+  "delta": 2316
+ },
+ "DoQ": {
+  "pq_c2s": 4129,
+  "pq_s2c": 5724,
+  "cl_c2s": 2844,
+  "cl_s2c": 4141,
+  "pq_total": 9853,
+  "cl_total": 6985,
+  "pq_ms": 104.5,
+  "cl_ms": 144.8,
+  "delta": 2868
+ },
+ "DoH2": {
+  "pq_c2s": 2231,
+  "pq_s2c": 5006,
+  "cl_c2s": 551,
+  "cl_s2c": 3918,
+  "pq_total": 7237,
+  "cl_total": 4469,
+  "pq_ms": 143.7,
+  "cl_ms": 143.2,
+  "delta": 2768
+ },
+ "DoH3": {
+  "pq_c2s": 6783,
+  "pq_s2c": 5633,
+  "cl_c2s": 4167,
+  "cl_s2c": 4319,
+  "pq_total": 12416,
+  "cl_total": 8486,
+  "pq_ms": 145.6,
+  "cl_ms": 144.5,
+  "delta": 3930
+ }
+}
