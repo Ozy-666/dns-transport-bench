@@ -30,12 +30,25 @@ which is the RFC 6298 retransmission timeout floor showing up as a constant
 rather than as a distribution. DoT's worst sample, 3 379 ms, is one further
 doubling of that timer. Neither QUIC transport passed 495 ms.
 
-DoH3's 15 no-answer lookups are not client trouble: they are our own
-post-quantum HTTP/3 handshake, the largest exchange this server performs, losing
-a packet and then hitting QUIC's 3x anti-amplification limit so the server may
-not retransmit until the client's probe timeout fires. Forcing the classical key
-exchange (`--tls-curve-preferences X25519`) gave 100 successes out of 100 under
-identical loss. Read DoH3's tail as "when it answers".
+DoH3's 15 no-answer lookups are not client trouble, and they are not a QUIC
+design cost either. Chasing them down led to a bug in nginx, filed as
+[nginx/nginx#1616](https://github.com/nginx/nginx/issues/1616) with a standalone
+reproduction at
+[nginx-quic-initial-repro](https://github.com/Ozy-666/nginx-quic-initial-repro).
+When the ServerHello spans two QUIC Initial packets and one of them is lost, the
+congestion window collapses below the bytes already in flight, and from then on
+nginx emits Initial packets carrying nothing but ACKs. The bytes in flight are
+Handshake packets the client cannot decrypt until the missing CRYPTO frame
+arrives, so the window never reopens and the handshake deadlocks until the client
+gives up. Two conditions have to hold together: the ServerHello has to need two
+packets, which the 1 088 B ML-KEM key share guarantees, and the certificate flight
+has to span several Handshake packets. Forcing the classical key exchange
+(`--tls-curve-preferences X25519`) keeps the ServerHello in one packet and gave
+100 successes out of 100 under identical loss, which is what first pointed at
+handshake size. A two-hunk patch, included in the repro bundle as
+`proposed.patch`, gave 0 failures out of 200 here. Until that lands, read DoH3's
+tail as "when it answers": the missing 15 are the slowest lookups, so the
+percentiles above flatter it.
 
 The one that needs explaining: on DoQ the *post-quantum* handshake finished a
 full round trip **faster** than the classical one. QUIC forbids a server from
